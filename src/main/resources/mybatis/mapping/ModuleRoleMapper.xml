@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springbootmybatis.dao.ModuleRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.example.springbootmybatis.bean.ModuleRole" >
+    <result column="ID_" property="id" jdbcType="INTEGER" />
+    <result column="M_ID_" property="mId" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="com.example.springbootmybatis.bean.ModuleRole" >
+    insert into module_role (ID_, M_ID_)
+    values (#{id,jdbcType=INTEGER}, #{mId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.springbootmybatis.bean.ModuleRole" >
+    insert into module_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="mId != null" >
+        M_ID_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mId != null" >
+        #{mId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

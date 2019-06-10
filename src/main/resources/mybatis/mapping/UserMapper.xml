@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootmybatis.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.example.springbootmybatis.bean.User">
+    <id column="USER_ID_" jdbcType="INTEGER" property="userId" />
+    <result column="USER_NAME_" jdbcType="VARCHAR" property="userName" />
+    <result column="PASSWORD_" jdbcType="VARCHAR" property="password" />
+    <result column="PHONE_" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    USER_ID_, USER_NAME_, PASSWORD_, PHONE_
+  </sql>
+  <sql id="Base_Module_list">
+
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where USER_ID_ = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user
+    where USER_ID_ = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.springbootmybatis.bean.User">
+    insert into t_user (USER_ID_, USER_NAME_, PASSWORD_, 
+      PHONE_)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.springbootmybatis.bean.User">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID_,
+      </if>
+      <if test="userName != null">
+        USER_NAME_,
+      </if>
+      <if test="password != null">
+        PASSWORD_,
+      </if>
+      <if test="phone != null">
+        PHONE_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.springbootmybatis.bean.User">
+    update t_user
+    <set>
+      <if test="userName != null">
+        USER_NAME_ = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD_ = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE_ = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID_ = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.springbootmybatis.bean.User">
+    update t_user
+    set USER_NAME_ = #{userName,jdbcType=VARCHAR},
+      PASSWORD_ = #{password,jdbcType=VARCHAR},
+      PHONE_ = #{phone,jdbcType=VARCHAR}
+    where USER_ID_ = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryAllUser" parameterMap="com.example.springbootmybatis.bean.User">
+    select * from t_uer
+  </select>
+  <select id="getPrivilegeListByUser" parameterType="com.example.springbootmybatis.bean.User" resultType="com.example.springbootmybatis.bean.Module">
+	SELECT
+			m.NAME_ AS name
+	FROM
+		(
+		SELECT
+			u.USER_ID_,
+			u.USER_NAME_,
+			ur.ROLE_ID_
+		FROM
+			t_user u
+			LEFT JOIN user_role ur ON u.USER_ID_ = ur.USER_ID_
+		<where>
+          <if test="userId != null and userId != ''">
+            u.USER_ID_ = #{userId}
+          </if>
+        </where>
+		) t1
+		LEFT JOIN role r ON t1.ROLE_ID_ = r.ID_
+		LEFT JOIN module_role mr ON r.ID_ = mr.ID_
+		LEFT JOIN module m ON mr.M_ID_ = m.M_ID_
+
+  </select>
+
+  <select id="queryUserByUserName" parameterType="java.lang.String" resultType="com.example.springbootmybatis.bean.User">
+    select * from t_user where USER_NAME_=#{key}
+  </select>
+</mapper>
